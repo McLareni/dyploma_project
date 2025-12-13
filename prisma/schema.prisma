@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  username      String
+  hashPassword     String
+  createdAt DateTime @default(now())
+}
+
+model Word{
+  id          Int      @id @default(autoincrement())
+  word        String   
+  translation String
+}
+
+model ConnectionWordUser{
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  wordId    Int
+  stage     Int      @default(0)
+  lastStudy DateTime @default(now())
+  nextReview DateTime
+}
+
+model Collection{
+  id        Int      @id @default(autoincrement())
+  name      String   
+  authorName  String
+}
+
+
+model ConnectionCollectionWord{
+  id          Int      @id @default(autoincrement())
+  collectionId  Int
+  wordId      Int
+}
