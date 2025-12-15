@@ -22,6 +22,8 @@ model Word {
   translation String
   collections ConnectionCollectionWord[]
   connections ConnectionWordUser[]
+
+  @@unique([word, translation])
 }
 
 model ConnectionWordUser {
