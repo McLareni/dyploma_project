@@ -12,6 +12,8 @@ model User {
   username     String
   hashPassword String
   createdAt    DateTime @default(now())
+
+  colections ConnectionUserCollection[]
 }
 
 model Word {
@@ -35,10 +37,13 @@ model ConnectionWordUser {
 }
 
 model Collection {
-  id         Int      @id @default(autoincrement())
+  id         Int                        @id @default(autoincrement())
   name       String
   authorName String
   words      ConnectionCollectionWord[]
+  leghth     Int                        @default(0)
+  users      ConnectionUserCollection[]
+  public     Boolean                    @default(false)
 }
 
 model ConnectionCollectionWord {
@@ -50,4 +55,16 @@ model ConnectionCollectionWord {
   word       Word       @relation(fields: [wordId], references: [id], onDelete: Cascade)
 
   @@unique([collectionId, wordId])
+}
+
+model ConnectionUserCollection {
+  id           Int        @id @default(autoincrement())
+  userId       Int
+  collectionId Int
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  progress     Int        @default(0)
+  completed    Boolean    @default(false)
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, collectionId])
 }

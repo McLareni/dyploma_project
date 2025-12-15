@@ -5,13 +5,11 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   const token = request.headers.get("Authorization")?.split(" ")[1];
 
-  //   const result = await decrypt(token);
+    const result = await decrypt(token);
 
-  //   if (!result) {
-  //     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  //   }
-
-  const result = { userId: 2 };
+    if (!result) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
   const collection = await prisma.connectionWordUser.findMany({
     where: { userId: Number(result.userId) },
