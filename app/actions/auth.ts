@@ -57,7 +57,7 @@ export async function login(state: LoginFormState, formData: FormData) {
   }
 }
 
-export async function registation(
+export async function registration(
   state: RegistationFormState,
   formData: FormData
 ) {
