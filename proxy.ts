@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { refreshAccessToken, verifySession } from "./lib/session";
+import { refreshAccessToken, verifySession } from "./app/lib/session";
 
-const protectedRoutes = ["/dashboard"];
+const protectedRoutes = ["/dashboard", "/"];
 const publicRoutes = ["/login", "/signup"];
 
 export default async function proxy(req: NextRequest) {
@@ -31,5 +31,5 @@ export default async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
