@@ -43,7 +43,7 @@ model Collection {
   name       String
   authorName String
   words      ConnectionCollectionWord[]
-  leghth     Int                        @default(0)
+  length     Int                        @default(0)
   users      ConnectionUserCollection[]
   public     Boolean                    @default(false)
 }
