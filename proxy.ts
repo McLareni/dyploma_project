@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { refreshAccessToken, verifySession } from "./app/lib/session";
 
-const protectedRoutes = ["/dashboard", "/"];
-const publicRoutes = ["/login", "/signup"];
+const protectedRoutes = ["/profile", "/", "/collections"];
+const publicRoutes = ["/auth/login", "/auth/signup"];
 
 export default async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
@@ -12,7 +12,7 @@ export default async function proxy(req: NextRequest) {
   let userId: string | undefined;
   try {
     const session = await verifySession();
-    userId = session.userId;
+    userId = session?.userId;
   } catch {
     await refreshAccessToken();
     const session = await verifySession();
@@ -20,7 +20,7 @@ export default async function proxy(req: NextRequest) {
   }
 
   if (isProtectedRoute && !userId) {
-    return NextResponse.redirect(new URL("/login", req.nextUrl));
+    return NextResponse.redirect(new URL("/auth/login", req.nextUrl));
   }
 
   if (isPublicRoute && userId) {

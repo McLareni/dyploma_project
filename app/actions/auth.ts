@@ -34,18 +34,16 @@ export async function login(state: LoginFormState, formData: FormData) {
   });
 
   const data = await res.json();
-  const user = data.user;
-
   if (res.status === 200) {
     const cookieStore = await cookies();
-    cookieStore.set("session", user.accessToken, {
+    cookieStore.set("session", data.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
       expires: new Date(Date.now() + 6 * 60 * 60 * 1000),
     });
-    cookieStore.set("refresh", user.accessToken, {
+    cookieStore.set("refresh", data.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

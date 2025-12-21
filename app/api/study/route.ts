@@ -1,15 +1,16 @@
 import { prisma } from "@/app/lib/prisma";
 import { decrypt } from "@/utils/jwt";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const token = request.headers.get("Authorization")?.split(" ")[1];
 
-    const result = await decrypt(token);
+  const result = await decrypt(token);
 
-    if (!result) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+  if (!result) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   const collection = await prisma.connectionWordUser.findMany({
     where: { userId: Number(result.userId) },
@@ -28,14 +29,18 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const token = request.headers.get("Authorization")?.split(" ")[1];
+  let token = request.headers.get("Authorization")?.split(" ")[1];
+
+  if (!token) {
+    token = (await cookies()).get("session")?.value;
+  }
   const result = await decrypt(token);
 
   if (!result) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  let body: { userId: number; wordId: number };
+  let body: { wordId: number };
   try {
     body = await request.json();
   } catch {
@@ -46,15 +51,9 @@ export async function POST(request: Request) {
   }
 
   try {
-    if (body.userId !== Number(result.userId)) {
-      return new Response(JSON.stringify({ message: "Unauthorized" }), {
-        status: 401,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
     const newWord = await prisma.connectionWordUser.create({
       data: {
-        userId: body.userId,
+        userId: Number(result.userId),
         wordId: body.wordId,
         stage: 0,
         lastStudy: new Date(),

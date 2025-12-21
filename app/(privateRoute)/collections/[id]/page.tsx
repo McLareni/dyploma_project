@@ -1,6 +1,6 @@
-import CollectionCard from "@/components/Collections/CollectionCard/CollectionCard";
-import Study from "@/components/Study/Study";
 import StudySession from "@/components/Study/StudySession";
+import { getValue } from "@/utils/getCookiesValue";
+
 const URL = process.env.PUBLIC_HOST;
 
 type PageProps = {
@@ -9,13 +9,20 @@ type PageProps = {
 };
 
 export default async function Collection({ searchParams, params }: PageProps) {
+  const sessionToken = await getValue("session");
   const progress = (await searchParams).progress ?? "";
 
   const collectionId = (await params).id;
-  const res = await fetch(URL + `/api/collections/${collectionId}`);
+  const res = await fetch(URL + `/api/collections/${collectionId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${sessionToken}`,
+    },
+  });
   const collection: any = await res.json();
+
   return (
-    <div className="flex flex-col items-center p-12 gap-32">
+    <div className="flex flex-col items-center p-12 gap-20">
       <div>
         <h2 className="text-5xl text-gray-700">
           Collection: {collection.name}
@@ -23,6 +30,7 @@ export default async function Collection({ searchParams, params }: PageProps) {
         <p className="text-right">Author: {collection.authorName}</p>
       </div>
       <StudySession words={collection.words} progress={Number(progress)} />
+      
     </div>
   );
 }

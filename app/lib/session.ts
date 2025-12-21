@@ -4,6 +4,11 @@ import { decrypt, encrypt } from "@/utils/jwt";
 export async function verifySession() {
   const cookieStore = await cookies();
   const token = cookieStore.get("session")?.value;
+
+  if (!token) {
+    return;
+  }
+
   const payload = await decrypt(token);
 
   if (!payload?.userId) throw new Error("Unauthorized");
@@ -14,8 +19,12 @@ export async function refreshAccessToken() {
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get("refresh")?.value;
 
+  if (!refreshToken) {
+    return;
+  }
 
   const refreshPayload = await decrypt(refreshToken);
+
   if (!refreshPayload) {
     throw new Error("Session expired");
   }
