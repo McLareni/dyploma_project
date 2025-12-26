@@ -1,16 +1,17 @@
 import { decrypt } from "@/utils/jwt";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 const TOKEN = process.env.AI_API_KEY;
 
-const translate = (text: string, target: string) => `
+const translate = (text: string, target: string, from: string) => `
 Your task: Based on the text provided by the user, translate it from English to ${target}.
 
 Rules:
 1. Output only a JSON array with a single object.
 2. The object must have:
 {
-  "original text": "<The original text in English>",
+  "original text": "<The original text in ${from}>",
   "translated text": "<The translated text in ${target}>"
   "alternative translations": ["<alternative translation 1>", "<alternative translation 2>", "..."]
 }
@@ -22,18 +23,20 @@ user's text to translate: ${text}
 `;
 
 export async function POST(request: Request) {
-  const token = request.headers.get("Authorization")?.split(" ")[1];
+  const token =
+    request.headers.get("Authorization")?.split(" ")[1] ||
+    (await cookies()).get("session")?.value;
   const result = await decrypt(token);
 
   if (!result) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  let body: { userId: number; text: string; target: string };
+  let body: { userId: number; text: string; target: string; from: string };
   try {
     body = await request.json();
 
-    if (body.userId !== Number(result.userId)) {
+    if (Number(body.userId) !== Number(result.userId)) {
       return new Response(JSON.stringify({ message: "Unauthorized" }), {
         status: 401,
         headers: { "Content-Type": "application/json" },
@@ -64,7 +67,7 @@ export async function POST(request: Request) {
             },
             {
               role: "user",
-              content: translate(body.text, body.target),
+              content: translate(body.text, body.target, body.from),
             },
           ],
         }),
@@ -88,7 +91,7 @@ export async function POST(request: Request) {
     let translation = JSON.parse(cleaned);
 
     return NextResponse.json({
-      generated_text: translation || "Немає результату",
+      generated_text: translation[0] || "Немає результату",
     });
   } catch {
     return new Response(JSON.stringify({ message: "Internal Server Error" }), {

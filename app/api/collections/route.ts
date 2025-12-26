@@ -1,28 +1,45 @@
 import { prisma } from "@/app/lib/prisma";
 import { decrypt } from "@/utils/jwt";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  const token = request.headers.get("Authorization")?.split(" ")[1];
+  const token =
+    request.headers.get("Authorization")?.split(" ")[1] ||
+    (await cookies()).get("session")?.value;
 
-  const result = await decrypt(token);  
+  const result = await decrypt(token);
 
   if (!result) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const collections = await prisma.connectionUserCollection.findMany({
-    where: { userId: Number(result.userId) },
+  const collections = await prisma.collection.findMany({
+    where: {
+      OR: [
+        { public: true },
+        {
+          users: {
+            some: {
+              userId: Number(result.userId),
+            },
+          },
+        },
+      ],
+    },
     select: {
       id: true,
-      progress: true,
-      completed: true,
-      collection: {
+      name: true,
+      authorName: true,
+      length: true,
+      public: true,
+      users: {
+        where: {
+          userId: Number(result.userId),
+        },
         select: {
-          id: true,
-          name: true,
-          authorName: true,
-          length: true,
+          progress: true,
+          completed: true,
         },
       },
     },
@@ -32,11 +49,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  // const token = request.headers.get("Authorization")?.split(" ")[1];
+  const token =
+    request.headers.get("Authorization")?.split(" ")[1] ||
+    (await cookies()).get("session")?.value;
 
-  // const result = await decrypt(token);
-
-  const result = { userId: 2 };
+  const result = await decrypt(token);
 
   if (!result) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -49,7 +66,8 @@ export async function POST(request: Request) {
   };
   try {
     body = await request.json();
-    if (body.userId !== Number(result.userId)) {
+    console.log(body);
+    if (Number(body.userId) !== Number(result.userId)) {
       return new Response(JSON.stringify({ message: "Unauthorized" }), {
         status: 401,
         headers: { "Content-Type": "application/json" },
@@ -101,7 +119,7 @@ export async function POST(request: Request) {
 
       await tx.connectionUserCollection.create({
         data: {
-          userId: result.userId,
+          userId: Number(result.userId),
           collectionId: newCollection.id,
           completed: false,
           progress: 0,

@@ -3,3 +3,8 @@ export interface Word {
   word: string;
   translation: string;
 }
+
+export interface GeneratedWord {
+  word: string;
+  translation: string;
+}

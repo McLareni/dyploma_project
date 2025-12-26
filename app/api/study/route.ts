@@ -4,7 +4,11 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  const token = request.headers.get("Authorization")?.split(" ")[1];
+  let token = request.headers.get("Authorization")?.split(" ")[1];
+
+  if (!token) {
+    token = (await cookies()).get("session")?.value;
+  }
 
   const result = await decrypt(token);
 
@@ -12,9 +16,17 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const now = new Date();
+
   const collection = await prisma.connectionWordUser.findMany({
-    where: { userId: Number(result.userId) },
+    where: {
+      userId: Number(result.userId),
+      nextReview: {
+        lte: now,
+      },
+    },
     select: {
+      stage: true,
       word: {
         select: {
           id: true,

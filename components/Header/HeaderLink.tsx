@@ -9,7 +9,7 @@ interface IProps {
 
 export default function HeaderLink({ href, text }: IProps) {
   const pathname = usePathname();
-  const isActive = pathname === href;
+  const isActive = href === "/" ? pathname === "/" : pathname.startsWith(href);
   return (
     <li>
       <Link

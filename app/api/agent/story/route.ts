@@ -1,4 +1,5 @@
 import { decrypt } from "@/utils/jwt";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 const TOKEN = process.env.AI_API_KEY;
@@ -25,8 +26,12 @@ User's topic or text: ${prompt}
 `;
 
 export async function POST(request: Request) {
-  const token = request.headers.get("Authorization")?.split(" ")[1];
+  const token =
+    request.headers.get("Authorization")?.split(" ")[1] ||
+    (await cookies()).get("session")?.value;
   const result = await decrypt(token);
+
+  console.log(result);
 
   if (!result) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -36,7 +41,7 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
 
-    if (body.userId !== Number(result.userId)) {
+    if (Number(body.userId) !== Number(result.userId)) {
       return new Response(JSON.stringify({ message: "Unauthorized" }), {
         status: 401,
         headers: { "Content-Type": "application/json" },
@@ -63,7 +68,7 @@ export async function POST(request: Request) {
           messages: [
             {
               role: "system",
-              content: "You must output ONLY JSON array, no explanations.",
+              content: "You must output ONLY JSON, no explanations.",
             },
             {
               role: "user",
@@ -88,11 +93,11 @@ export async function POST(request: Request) {
       .replace(/```json|```/g, "")
       .trim();
 
-    let cleanedWords = JSON.parse(cleaned);
-    if (!Array.isArray(cleanedWords)) throw new Error("Invalid JSON output");
+    let cleanedStory = JSON.parse(cleaned);
+    if (!Array.isArray(cleanedStory)) throw new Error("Invalid JSON output");
 
     return NextResponse.json({
-      generated_text: cleanedWords || "Немає результату",
+      generated_text: cleanedStory[0] || "Немає результату",
     });
   } catch {
     return new Response(JSON.stringify({ message: "Internal Server Error" }), {

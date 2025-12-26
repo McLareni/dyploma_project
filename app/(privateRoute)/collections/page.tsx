@@ -11,8 +11,11 @@ export default async function Collections() {
     headers: {
       Authorization: `Bearer ${sessionToken}`,
     },
+    cache: "no-store",
   });
   const collections: Collection[] = await res.json();
+
+  console.log(collections);
 
   return (
     <div className="flex flex-row gap-8 p-8 justify-center">

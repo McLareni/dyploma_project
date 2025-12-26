@@ -1,4 +1,5 @@
 import { decrypt } from "@/utils/jwt";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 const TOKEN = process.env.AI_API_KEY;
@@ -18,7 +19,8 @@ MAX 25 words
 `;
 
 export async function POST(request: Request) {
-  const token = request.headers.get("Authorization")?.split(" ")[1];
+  const token = (await cookies()).get("session")?.value;
+
   const result = await decrypt(token);
 
   if (!result) {
@@ -29,7 +31,7 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
 
-    if (body.userId !== Number(result.userId)) {
+    if (Number(body.userId) !== Number(result.userId)) {
       return new Response(JSON.stringify({ message: "Unauthorized" }), {
         status: 401,
         headers: { "Content-Type": "application/json" },
@@ -73,7 +75,6 @@ export async function POST(request: Request) {
     }
 
     const data = await response.json();
-    console.log(data.choices[0].message.content);
 
     const rawWords = data.choices[0].message.content;
     const cleaned = rawWords
@@ -81,16 +82,23 @@ export async function POST(request: Request) {
       .replace(/```json|```/g, "")
       .trim();
 
-    let cleanedWords = JSON.parse(cleaned);
-    if (!Array.isArray(cleanedWords)) throw new Error("Invalid JSON output");
+    const stringArray: string[] = JSON.parse(cleaned);
+
+    if (!Array.isArray(stringArray)) throw new Error("Invalid JSON output");
+
+    const cleanedWords = stringArray.map((item) => {
+      if (typeof item === "string") return JSON.parse(item);
+      return item;
+    });
 
     return NextResponse.json({
-      generated_text: cleanedWords || "Немає результату",
+      generated_text: cleanedWords,
     });
-  } catch {
-    return new Response(JSON.stringify({ message: "Internal Server Error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({
+      generated_text: [],
+      error: "Invalid or empty JSON output",
     });
   }
 }

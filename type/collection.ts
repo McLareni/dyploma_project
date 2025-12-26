@@ -1,11 +1,10 @@
 export type Collection = {
   id: number;
-  progress: number;
-  completed: boolean;
-  collection: {
-    id: number;
-    name: string;
-    authorName: string;
-    length: number;
-  };
+  name: string;
+  length: number;
+  authorName: string;
+  users: {
+    progress: number;
+    completed: boolean;
+  }[];
 };

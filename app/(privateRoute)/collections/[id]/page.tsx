@@ -29,8 +29,11 @@ export default async function Collection({ searchParams, params }: PageProps) {
         </h2>
         <p className="text-right">Author: {collection.authorName}</p>
       </div>
-      <StudySession words={collection.words} progress={Number(progress)} />
-      
+      <StudySession
+        words={collection.words.map((item: any) => ({ ...item.word }))}
+        progress={Number(progress)}
+        collectionId={collection.id}
+      />
     </div>
   );
 }

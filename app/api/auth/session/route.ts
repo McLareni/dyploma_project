@@ -9,7 +9,7 @@ export async function GET() {
     return NextResponse.json({ user: null }, { status: 401 });
   }
 
-  const user = decrypt(token);
-
+  const user = await decrypt(token);
+  
   return NextResponse.json({ user });
 }
