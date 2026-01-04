@@ -70,8 +70,20 @@ export async function POST(
   }
 
   try {
-    const collection = await prisma.connectionUserCollection.findFirstOrThrow({
-      where: { userId: Number(result.userId), collectionId: Number(id) },
+    const collection = await prisma.connectionUserCollection.upsert({
+      where: {
+        userId_collectionId: {
+          userId: Number(result.userId),
+          collectionId: Number(id),
+        },
+      },
+      create: {
+        userId: Number(result.userId),
+        collectionId: Number(id),
+        progress: body.progress,
+        completed: false,
+      },
+      update: {},
       include: {
         collection: true,
       },

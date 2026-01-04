@@ -2,9 +2,11 @@ interface IProps {
   value: string;
   placeholder: string;
   loading: boolean;
-  onChange: (e: any) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: () => void;
 }
+
+const MAX_LENGTH = 20;
 
 export default function ChatInput({
   value,
@@ -13,21 +15,38 @@ export default function ChatInput({
   placeholder,
   loading,
 }: IProps) {
+  const isOverLimit = value.length > MAX_LENGTH;
+
   return (
-    <div className="border-t p-3 flex gap-2">
-      <input
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        className="flex-1 border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <button
-        onClick={onSubmit}
-        disabled={loading}
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition disabled:opacity-50"
-      >
-        {loading ? "Loading..." : "Generate"}
-      </button>
+    <div className="border-t p-3 flex flex-col gap-1">
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <input
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            className={`w-full border rounded px-3 py-2 pr-32 text-sm focus:outline-none focus:ring-2 ${
+              isOverLimit
+                ? "border-red-500 focus:ring-red-500"
+                : "focus:ring-blue-500"
+            }`}
+          />
+
+          {isOverLimit && (
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-red-500 pointer-events-none">
+              Max {MAX_LENGTH} chars
+            </span>
+          )}
+        </div>
+
+        <button
+          onClick={onSubmit}
+          disabled={loading || isOverLimit}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition disabled:opacity-50"
+        >
+          {loading ? "Loading..." : "Generate"}
+        </button>
+      </div>
     </div>
   );
 }

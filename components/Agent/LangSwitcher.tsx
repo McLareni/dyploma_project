@@ -27,33 +27,65 @@ export default function LanguageSwitch({ setFromLang, setToLang }: IProps) {
   };
 
   return (
-    <div className="mx-3 mb-2 px-3 py-2 rounded-lg border bg-gray-50 flex items-center gap-2 text-sm">
-      <select
-        value={fromLang}
-        onChange={handleFromChange}
-        className="bg-white border rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        <option value="en">EN</option>
-        <option value="pl">PL</option>
-        <option value="ua">UA</option>
-      </select>
+    <div className="px-3 py-2 border-t flex items-center gap-2 text-sm bg-white">
+      <div className="relative">
+        <select
+          value={fromLang}
+          onChange={handleFromChange}
+          className="
+        appearance-none
+        bg-white
+        border border-gray-700
+        text-gray-700
+        rounded-md
+        pl-3 pr-8 py-1.5
+        focus:outline-none
+        focus:ring-2 focus:ring-blue-500
+        cursor-pointer
+      "
+        >
+          <option value="en">EN</option>
+          <option value="pl">PL</option>
+          <option value="ua">UA</option>
+        </select>
 
-      <span className="text-gray-400">→</span>
+        <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-700 text-xs">
+          ▾
+        </span>
+      </div>
 
-      <select
-        value={toLang}
-        onChange={handleToChange}
-        className="bg-white border rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        <option value="pl">PL</option>
-        <option value="ua">UA</option>
-        <option value="en">EN</option>
-      </select>
+      <span className="text-gray-700 select-none">→</span>
+
+      <div className="relative">
+        <select
+          value={toLang}
+          onChange={handleToChange}
+          className="
+        appearance-none
+        bg-white
+        border border-gray-700
+        text-gray-700
+        rounded-md
+        pl-3 pr-8 py-1.5
+        focus:outline-none
+        focus:ring-2 focus:ring-blue-500
+        cursor-pointer
+      "
+        >
+          <option value="pl">PL</option>
+          <option value="ua">UA</option>
+          <option value="en">EN</option>
+        </select>
+
+        <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-700 text-xs">
+          ▾
+        </span>
+      </div>
 
       <button
         type="button"
         onClick={handleSwap}
-        className="ml-auto px-2 py-1 rounded-md text-blue-600 hover:bg-blue-50 transition"
+        className="ml-auto border border-gray-700 text-gray-700 rounded-md px-3 py-1.5 hover:bg-gray-700 hover:text-white transition"
       >
         ⇄ Swap
       </button>

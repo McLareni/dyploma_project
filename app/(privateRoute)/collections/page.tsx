@@ -18,7 +18,7 @@ export default async function Collections() {
   console.log(collections);
 
   return (
-    <div className="flex flex-row gap-8 p-8 justify-center">
+    <div className="flex flex-row flex-wrap gap-8 p-8 justify-center">
       {collections.length &&
         collections.map((collection: any) => (
           <CollectionCard key={collection.id} collection={collection} />

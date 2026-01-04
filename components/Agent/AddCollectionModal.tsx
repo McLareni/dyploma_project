@@ -3,11 +3,6 @@
 import { useState } from "react";
 import Modal from "../UI/Modal";
 
-interface GeneratedWord {
-  word: string;
-  translation: string;
-}
-
 interface AddCollectionModalProps {
   isOpen: boolean;
   onClose: () => void;
