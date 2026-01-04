@@ -33,6 +33,7 @@ export default function SignupForm() {
             id="username"
             name="username"
             placeholder="Username"
+            defaultValue={state?.values?.username ?? ""}
             className="
               px-3 py-2
               border border-gray-300
@@ -46,7 +47,7 @@ export default function SignupForm() {
         </div>
         {state?.errors?.username && (
           <p className="text-red-500 text-sm -mt-2">
-            {state.errors.username}
+            {state.errors.username[0]}
           </p>
         )}
 
@@ -59,6 +60,7 @@ export default function SignupForm() {
             name="email"
             type="email"
             placeholder="Email"
+            defaultValue={state?.values?.email ?? ""}
             className="
               px-3 py-2
               border border-gray-300
@@ -72,7 +74,7 @@ export default function SignupForm() {
         </div>
         {state?.errors?.email && (
           <p className="text-red-500 text-sm -mt-2">
-            {state.errors.email}
+            {state.errors.email[0]}
           </p>
         )}
 
@@ -85,6 +87,7 @@ export default function SignupForm() {
             name="password"
             type="password"
             placeholder="Password"
+            defaultValue={state?.values?.password ?? ""}
             className="
               px-3 py-2
               border border-gray-300
@@ -98,17 +101,14 @@ export default function SignupForm() {
         </div>
         {state?.errors?.password && (
           <ul className="text-red-500 text-sm -mt-2 list-disc pl-5">
-            {state.errors.password.map((error: string) => (
-              <li key={error}>{error}</li>
+            {state.errors.password.map((e: string) => (
+              <li key={e}>{e}</li>
             ))}
           </ul>
         )}
 
         <div className="flex flex-col gap-1">
-          <label
-            htmlFor="repassword"
-            className="text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="repassword" className="text-sm font-medium text-gray-700">
             Repeat password
           </label>
           <input
@@ -116,6 +116,7 @@ export default function SignupForm() {
             name="repassword"
             type="password"
             placeholder="Repeat password"
+            defaultValue={state?.values?.repassword ?? ""}
             className="
               px-3 py-2
               border border-gray-300
@@ -129,7 +130,13 @@ export default function SignupForm() {
         </div>
         {state?.errors?.repassword && (
           <p className="text-red-500 text-sm -mt-2">
-            {state.errors.repassword}
+            {state.errors.repassword[0]}
+          </p>
+        )}
+
+        {state?.message && (
+          <p className="text-red-600 text-sm text-center">
+            {state.message}
           </p>
         )}
 

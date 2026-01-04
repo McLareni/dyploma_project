@@ -15,12 +15,12 @@ export const LoginFormSchema = z.object({
     .trim()
     .nonempty({ message: "Password is required" })
     .refine(
-      (val) => !val || (
-        val.length >= 8 &&
-        /[a-zA-Z]/.test(val) &&
-        /[0-9]/.test(val) &&
-        /[^a-zA-Z0-9]/.test(val)
-      ),
+      (val) =>
+        !val ||
+        (val.length >= 8 &&
+          /[a-zA-Z]/.test(val) &&
+          /[0-9]/.test(val) &&
+          /[^a-zA-Z0-9]/.test(val)),
       { message: "Invalid password" }
     ),
 });
@@ -30,6 +30,10 @@ export type LoginFormState =
       errors?: {
         email?: string[];
         password?: string[];
+      };
+      values?: {
+        email?: string;
+        password?: string;
       };
       message?: string;
     }
@@ -61,6 +65,12 @@ export type RegistationFormState =
         username?: string[];
         password?: string[];
         repassword?: string[];
+      };
+      values?: {
+        email?: string;
+        username?: string;
+        password?: string;
+        repassword?: string;
       };
       message?: string;
     }
