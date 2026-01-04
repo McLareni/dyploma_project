@@ -8,7 +8,7 @@ export default function LogInForm() {
   const [state, action, pending] = useActionState(login, undefined);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-200">
+    <div className="min-h-screen bg-gray-200 flex items-start justify-center pt-20">
       <form
         action={action}
         className="
@@ -18,11 +18,10 @@ export default function LogInForm() {
           rounded-xl
           shadow-lg
           p-6
-          pt-4
           flex flex-col gap-3
         "
       >
-        <h1 className="text-3xl font-semibold text-center text-blue-600 mb-1">
+        <h1 className="text-3xl font-semibold text-blue-600 mb-4">
           Log in
         </h1>
 
@@ -35,6 +34,7 @@ export default function LogInForm() {
             name="email"
             type="email"
             placeholder="Email"
+            defaultValue={state?.values?.email ?? ""}
             className="
               px-3 py-2
               border border-gray-300
@@ -45,12 +45,12 @@ export default function LogInForm() {
               focus:ring-2 focus:ring-blue-200
             "
           />
+          {state?.errors?.email && (
+            <p className="text-red-500 text-sm mt-1">
+              {state.errors.email[0]}
+            </p>
+          )}
         </div>
-        {state?.errors?.email && (
-          <p className="text-red-500 text-sm -mt-2">
-            {state.errors.email}
-          </p>
-        )}
 
         <div className="flex flex-col gap-1">
           <label htmlFor="password" className="text-sm font-medium text-gray-700">
@@ -61,6 +61,7 @@ export default function LogInForm() {
             name="password"
             type="password"
             placeholder="Password"
+            defaultValue={state?.values?.password ?? ""}
             className="
               px-3 py-2
               border border-gray-300
@@ -71,18 +72,24 @@ export default function LogInForm() {
               focus:ring-2 focus:ring-blue-200
             "
           />
+          {state?.errors?.password && (
+            <p className="text-red-500 text-sm mt-1">
+              {state.errors.password[0]}
+            </p>
+          )}
         </div>
-       {state?.errors?.password && (
-  <p className="text-red-500 text-sm -mt-2">
-    {Array.isArray(state.errors.password) ? state.errors.password[0] : state.errors.password}
-  </p>
-)}
+
+        {state?.message && (
+          <p className="text-red-600 text-sm mt-2">
+            {state.message}
+          </p>
+        )}
 
         <button
           disabled={pending}
           type="submit"
           className="
-            mt-3
+            mt-4
             bg-blue-500
             text-white
             py-2
@@ -97,7 +104,7 @@ export default function LogInForm() {
           Log in
         </button>
 
-       <p className="text-center text-sm text-gray-600">
+        <p className="text-sm text-gray-600 mt-2">
           Don’t have an account?{" "}
           <Link
             href="/auth/registration"
