@@ -1,5 +1,6 @@
 import { prisma } from "@/app/lib/prisma";
 import { decrypt } from "@/utils/jwt";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -7,7 +8,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const token = request.headers.get("Authorization")?.split(" ")[1];
+  const token =
+    request.headers.get("Authorization")?.split(" ")[1] ||
+    (await cookies()).get("session")?.value;
 
   const result = await decrypt(token);
 
