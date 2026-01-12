@@ -26,6 +26,7 @@ export default function Profile() {
   const session = useSession();
 
   useEffect(() => {
+    if (!session.user) return;
     async function fetchUser() {
       const res = await fetch(`/api/profile/${session.user.userId}`);
       const data = await res.json();
@@ -37,18 +38,21 @@ export default function Profile() {
     }
 
     fetchUser();
-  }, []);
+  }, [session.user]);
 
   const currentLevelIndex = levels.findIndex(
     (level) => user.learnedWords <= level.maxWords
   );
   const currentLevel = levels[currentLevelIndex];
 
-  const prevLevelMax = currentLevelIndex === 0 ? 0 : levels[currentLevelIndex - 1].maxWords;
+  const prevLevelMax =
+    currentLevelIndex === 0 ? 0 : levels[currentLevelIndex - 1].maxWords;
   const nextLevelMax = currentLevel.maxWords;
 
   const progressPercent = Math.min(
-    Math.round(((user.learnedWords - prevLevelMax) / (nextLevelMax - prevLevelMax)) * 100),
+    Math.round(
+      ((user.learnedWords - prevLevelMax) / (nextLevelMax - prevLevelMax)) * 100
+    ),
     100
   );
 
