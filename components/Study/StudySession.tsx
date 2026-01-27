@@ -127,7 +127,7 @@ export default function StudySession({
   }
 
   return (
-    <div className="flex flex-col gap-16 p-8 justify-center items-center">
+    <div className="flex flex-col gap-4 p-6 justify-center items-center h-full">
       {isStudy && (
         <StudyCounter
           currIndex={studyWords.filter((word) => word.correct).length}

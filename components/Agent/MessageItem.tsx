@@ -23,9 +23,9 @@ export default function MessageItem({
   onAddWord,
 }: IProps) {
   return (
-    <div className="relative">
+    <div className="relative flex flex-col gap-2">
       <div
-        className={`max-w-[80%] px-4 py-2 rounded-lg text-sm whitespace-pre-line ${
+        className={`max-w-[85%] sm:max-w-[80%] px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm whitespace-pre-line ${
           msg.role === "ai"
             ? "bg-gray-100 text-gray-700 self-start"
             : "bg-blue-500 text-white self-end ml-auto"
@@ -36,7 +36,7 @@ export default function MessageItem({
       {msg.role === "ai" && msg.mode === "collection" && (
         <button
           onClick={() => onAddCollection(msg.collectionData || [])}
-          className="hover:bg-blue-600 rounded-xl px-4 py-2 font-bold text-gray-700 hover:text-white text-sm absolute top-2 right-2 -translate-x-full"
+          className="self-start bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-1.5 font-semibold text-white text-xs sm:text-sm transition"
         >
           Add collection
         </button>
@@ -44,7 +44,7 @@ export default function MessageItem({
       {msg.role === "ai" && msg.mode === "translate" && (
         <button
           onClick={() => onAddWord(msg.translateWord)}
-          className="hover:bg-blue-600 rounded-xl px-4 py-2 font-bold text-gray-700 hover:text-white text-sm absolute top-2 right-10 -translate-x-full"
+          className="self-start bg-blue-500 hover:bg-blue-600 rounded-lg px-3 py-1.5 font-semibold text-white text-xs sm:text-sm transition"
         >
           Add word
         </button>

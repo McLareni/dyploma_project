@@ -1,5 +1,4 @@
 "use client";
-import { Word } from "@/type/word";
 
 import Actions from "./Actions";
 import clsx from "clsx";
@@ -19,19 +18,19 @@ export default function Study({ word: studyWord, nextWord }: IProps) {
   };
 
   return (
-    <div key={studyWord.word} className="flex flex-col items-center gap-12">
-      <div className="outline-none perspective-midrange w-72 h-96">
+    <div key={studyWord.word} className="flex flex-col items-center gap-8 sm:gap-10 lg:gap-12 px-4 flex-1">
+      <div className="outline-none perspective-midrange w-60 h-60 flex-1 lg:w-62 lg:h-80">
         <div
           className={clsx(
-            "relative size-full transition duration-1000 transform-3d  text-4xl text-center leading-96 text-gray-700",
+            "relative size-full transition duration-1000 transform-3d text-2xl sm:text-3xl lg:text-4xl text-center leading-90 text-gray-700",
             showBack && "transform-[rotateY(180deg)]"
           )}
         >
-          <div className="absolute inset-0 size-full backface-hidden bg-white rounded">
-            <h2 className="">{studyWord.word}</h2>
+          <div className="absolute inset-0 size-full backface-hidden bg-white rounded flex items-center justify-center p-4">
+            <h2 className="break-words">{studyWord.word}</h2>
           </div>
-          <div className="absolute inset-0 size-full backface-hidden transform-[rotateY(180deg)] bg-white  rounded">
-            <h2 className="">{studyWord.translation}</h2>
+          <div className="absolute inset-0 size-full backface-hidden transform-[rotateY(180deg)] bg-white rounded flex items-center justify-center p-4">
+            <h2 className="break-words">{studyWord.translation}</h2>
           </div>
         </div>
       </div>

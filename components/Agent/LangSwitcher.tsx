@@ -27,7 +27,7 @@ export default function LanguageSwitch({ setFromLang, setToLang }: IProps) {
   };
 
   return (
-    <div className="px-3 py-2 border-t flex items-center gap-2 text-sm bg-white">
+    <div className="px-2 sm:px-3 py-2 border-t flex flex-wrap items-center gap-2 text-xs sm:text-sm bg-white">
       <div className="relative">
         <select
           value={fromLang}
@@ -38,7 +38,8 @@ export default function LanguageSwitch({ setFromLang, setToLang }: IProps) {
         border border-gray-700
         text-gray-700
         rounded-md
-        pl-3 pr-8 py-1.5
+        pl-2 sm:pl-3 pr-7 sm:pr-8 py-1.5
+        text-xs sm:text-sm
         focus:outline-none
         focus:ring-2 focus:ring-blue-500
         cursor-pointer
@@ -54,7 +55,7 @@ export default function LanguageSwitch({ setFromLang, setToLang }: IProps) {
         </span>
       </div>
 
-      <span className="text-gray-700 select-none">→</span>
+      <span className="text-gray-700 select-none text-xs sm:text-sm">→</span>
 
       <div className="relative">
         <select
@@ -66,7 +67,8 @@ export default function LanguageSwitch({ setFromLang, setToLang }: IProps) {
         border border-gray-700
         text-gray-700
         rounded-md
-        pl-3 pr-8 py-1.5
+        pl-2 sm:pl-3 pr-7 sm:pr-8 py-1.5
+        text-xs sm:text-sm
         focus:outline-none
         focus:ring-2 focus:ring-blue-500
         cursor-pointer
@@ -85,7 +87,7 @@ export default function LanguageSwitch({ setFromLang, setToLang }: IProps) {
       <button
         type="button"
         onClick={handleSwap}
-        className="ml-auto border border-gray-700 text-gray-700 rounded-md px-3 py-1.5 hover:bg-gray-700 hover:text-white transition"
+        className="ml-auto border border-gray-700 text-gray-700 rounded-md px-2 sm:px-3 py-1.5 text-xs sm:text-sm hover:bg-gray-700 hover:text-white transition"
       >
         ⇄ Swap
       </button>

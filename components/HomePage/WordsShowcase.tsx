@@ -16,7 +16,7 @@ type WordCard = Word & {
   nextReview: string;
   canStudy: boolean;
 };
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 10;
 
 export default function WordsShowcase() {
   const [query, setQuery] = useState("");
@@ -167,24 +167,24 @@ export default function WordsShowcase() {
   };
 
   return (
-    <section className="max-w-85 w-85">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <div className="space-y-0.5">
+    <section className="w-full lg:w-75 h-full flex flex-col">
+      <div className="mb-3 flex items-center justify-between gap-2 sm:gap-3 lg:flex">
+        <div className="space-y-0.5 hidden lg:block">
           <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
             All words
           </p>
-          <h2 className="text-lg font-semibold text-slate-900">Vocabulary</h2>
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900">Vocabulary</h2>
         </div>
-        <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm">
-          <span className="uppercase tracking-wide text-slate-500">Words</span>
-          <span className="text-base text-slate-900">
+        <div className="flex items-center gap-1.5 sm:gap-2 rounded-full border border-slate-200 bg-white px-2 sm:px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm">
+          <span className="uppercase tracking-wide text-slate-500 text-[10px] sm:text-xs">Words</span>
+          <span className="text-sm sm:text-base text-slate-900">
             {filteredTotal}/{total}
           </span>
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white/85 shadow-[0_10px_26px_-20px_rgba(15,23,42,0.45)] backdrop-blur">
-        <div className="flex flex-wrap items-center gap-2 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-500">
+      <div className="rounded-xl border border-slate-200 bg-white/85 shadow-[0_10px_26px_-20px_rgba(15,23,42,0.45)] backdrop-blur flex-1 flex flex-col overflow-hidden">
+        <div className="flex flex-wrap items-center gap-2 px-2 sm:px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-500 shrink-0">
           <WordsFilter
             query={query}
             onQueryChange={(value) => {
@@ -195,7 +195,7 @@ export default function WordsShowcase() {
           />
         </div>
 
-        <div className="h-[70vh] flex flex-col gap-2 overflow-y-auto px-3 py-3">
+        <div className="flex-1 flex flex-col gap-2 overflow-y-auto px-2 sm:px-3 py-3">
           <WordsList
             words={words}
             loading={loading}
@@ -207,16 +207,16 @@ export default function WordsShowcase() {
           />
         </div>
 
-        <div className="flex items-center justify-between border-t border-slate-100 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-600">
+        <div className="flex items-center justify-between border-t border-slate-100 px-2 sm:px-3 py-2 text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-600 shrink-0">
           <span>
             Page {page} / {totalPages}
           </span>
-          <div className="flex gap-2">
+          <div className="flex gap-1 sm:gap-2">
             <button
               type="button"
               disabled={page <= 1 || loading}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
-              className="rounded-md border border-slate-200 bg-white px-3 py-1 text-[11px] font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-md border border-slate-200 bg-white px-2 sm:px-3 py-1 text-[10px] sm:text-[11px] font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Prev
             </button>
@@ -224,7 +224,7 @@ export default function WordsShowcase() {
               type="button"
               disabled={page >= totalPages || loading}
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              className="rounded-md border border-slate-200 bg-white px-3 py-1 text-[11px] font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-md border border-slate-200 bg-white px-2 sm:px-3 py-1 text-[10px] sm:text-[11px] font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next
             </button>

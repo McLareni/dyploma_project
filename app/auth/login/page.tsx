@@ -8,11 +8,11 @@ export default function LogInForm() {
   const [state, action, pending] = useActionState(login, undefined);
 
   return (
-    <div className="min-h-screen bg-gray-200 flex items-start justify-center pt-20">
+    <div className="min-h-screen bg-gray-200 flex items-start justify-center pt-12 sm:pt-20 px-4">
       <form
         action={action}
         className="
-          w-[420px]
+          w-full max-w-[420px]
           bg-white
           border-2 border-blue-500
           rounded-xl
@@ -89,12 +89,12 @@ export default function LogInForm() {
           disabled={pending}
           type="submit"
           className="
-            mt-4
+            mt-3 sm:mt-4
             bg-blue-500
             text-white
-            py-2
+            py-2.5 sm:py-2
             rounded-md
-            text-base
+            text-sm sm:text-base
             font-medium
             hover:bg-blue-600
             transition

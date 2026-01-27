@@ -16,7 +16,7 @@ export default function CollectionCard({ collection }: IProps) {
         isCompleted ? "#" : `/collections/${collection.id}?progress=${progress}`
       }
       key={collection.id}
-      className={`bg-white rounded p-4 relative overflow-hidden w-64 h-40 flex flex-col justify-between shadow-md transition-shadow ${
+      className={`bg-white rounded p-3 sm:p-4 relative overflow-hidden w-full sm:w-64 h-36 sm:h-40 flex flex-col justify-between shadow-md transition-shadow ${
         !isCompleted ? "hover:shadow-lg" : "pointer-events-none opacity-70"
       }`}
     >
@@ -24,7 +24,7 @@ export default function CollectionCard({ collection }: IProps) {
         <div className="absolute inset-0 flex justify-center items-center bg-white/70 z-10">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-12 w-12 text-blue-500"
+            className="h-10 w-10 sm:h-12 sm:w-12 text-blue-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -40,11 +40,13 @@ export default function CollectionCard({ collection }: IProps) {
       )}
 
       <div>
-        <h3 className="text-xl">{collection.name}</h3>
-        <p>Author: {collection.authorName}</p>
+        <h3 className="text-lg sm:text-xl truncate">{collection.name}</h3>
+        <p className="text-sm sm:text-base">Author: {collection.authorName}</p>
       </div>
       <div>
-        {progress}/{collection.length}
+        <div className="text-sm sm:text-base">
+          {progress}/{collection.length}
+        </div>
         <ProgressLine progress={progress || 0} total={collection.length} />
       </div>
     </Link>
