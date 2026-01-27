@@ -1,6 +1,7 @@
 "use client";
 
 import { registration } from "@/app/actions/auth";
+import Link from "next/link";
 import { useActionState } from "react";
 
 export default function SignupForm() {
@@ -158,6 +159,17 @@ export default function SignupForm() {
         >
           Sign Up
         </button>
+        
+        <p className="text-sm text-gray-600 mt-2 text-center">
+          Already have an account? {" "}
+          <Link
+            href="/auth/login"
+            className="text-blue-500 hover:text-blue-600 font-medium"
+          >
+            Log in
+          </Link>
+        </p>
+
       </form>
     </div>
   );

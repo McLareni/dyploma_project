@@ -45,10 +45,7 @@ export async function login(
   if (!res.ok) {
     return {
       message: data.error ?? "Invalid credentials",
-      values: {
-        email,
-        password,
-      },
+      values: { email, password },
     };
   }
 
@@ -111,25 +108,24 @@ export async function registration(
       const data = await res.json();
       return {
         message: data.error,
-        values: {
-          email,
-          username,
-          password,
-          repassword,
-        },
+        values: { email, username, password, repassword },
       };
     }
   } catch (error) {
     return {
       message: (error as Error).message,
-      values: {
-        email,
-        username,
-        password,
-        repassword,
-      },
+      values: { email, username, password, repassword },
     };
   }
+
+  redirect("/auth/login");
+}
+
+
+export async function logOut() {
+  const cookieStore = await cookies();
+  cookieStore.delete("session");
+  cookieStore.delete("refresh");
 
   redirect("/auth/login");
 }

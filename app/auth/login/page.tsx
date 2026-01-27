@@ -18,10 +18,10 @@ export default function LogInForm() {
           rounded-xl
           shadow-lg
           p-6
-          flex flex-col gap-3
+          flex flex-col gap-3 
         "
       >
-        <h1 className="text-3xl font-semibold text-blue-600 mb-4">
+        <h1 className="text-3xl font-semibold text-blue-600 mb-4 text-center">
           Log in
         </h1>
 
@@ -104,7 +104,7 @@ export default function LogInForm() {
           Log in
         </button>
 
-        <p className="text-sm text-gray-600 mt-2">
+        <p className="text-sm text-gray-600 mt-2 text-center">
           Don’t have an account?{" "}
           <Link
             href="/auth/registration"
