@@ -21,15 +21,14 @@ export default function AddWordModal({
   onClose,
   onSubmit,
   defaultWord = {
-    word: "I love you",
-    translation: "Kocham cię",
-    alternatives: ["Lubię cię", "Jestem w tobie zakochany/zakochana"],
+    word: "",
+    translation: "",
+    alternatives: [],
   },
 }: AddWordModalProps) {
   const [word, setWord] = useState(defaultWord.word);
   const [translation, setTranslation] = useState(defaultWord.translation);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  console.log(defaultWord);
 
   const handleSubmit = () => {
     if (!word.trim() || !translation.trim()) return;
@@ -65,7 +64,15 @@ export default function AddWordModal({
           <input
             type="text"
             value={word}
-            onChange={(e) => setWord(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value.length === 0) {
+                setWord(value);
+              } else {
+                setWord(value.charAt(0).toUpperCase() + value.slice(1).toLowerCase());
+              }
+            }}
+            placeholder="Enter word"
             className="border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -76,13 +83,20 @@ export default function AddWordModal({
           <input
             type="text"
             value={translation}
-            onChange={(e) => setTranslation(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (value.length === 0) {
+                setTranslation(value);
+              } else {
+                setTranslation(value.charAt(0).toUpperCase() + value.slice(1).toLowerCase());
+              }
+            }}
             onFocus={() => setDropdownOpen(true)}
-            placeholder="Select or type translation"
+            placeholder="Type translation"
             className="border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
-          {dropdownOpen && (
+          {dropdownOpen && (defaultWord.alternatives || []).length > 0 && (
             <ul className="absolute z-10 mt-20 w-full max-h-40 overflow-y-auto border rounded bg-white shadow-lg">
               {[
                 defaultWord.translation,

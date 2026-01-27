@@ -6,7 +6,7 @@ interface IProps {
   onSubmit: () => void;
 }
 
-const MAX_LENGTH = 20;
+const MAX_LENGTH = 40;
 
 export default function ChatInput({
   value,
