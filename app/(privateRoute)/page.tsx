@@ -10,10 +10,12 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col items-center justify-center gap-5 text-center lg:max-w-3xl">
-          <h1 className="text-5xl font-bold leading-tight">Welcome to EasyEnglish</h1>
+          <h1 className="text-5xl font-bold leading-tight">
+            Welcome to EasyLanguage
+          </h1>
           <p className="text-xl text-slate-700">
             Your personal study app to easily learn new words and improve your
-            English skills.
+            language skills.
           </p>
           <MainBtn />
         </div>
