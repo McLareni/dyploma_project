@@ -7,11 +7,11 @@ export default function SignupForm() {
   const [state, action, pending] = useActionState(registration, undefined);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-200">
+    <div className="min-h-screen flex items-center justify-center bg-gray-200 px-4 py-8">
       <form
         action={action}
         className="
-          w-[420px]
+          w-full max-w-[420px]
           bg-white
           border-2 border-blue-500
           rounded-xl

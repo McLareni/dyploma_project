@@ -56,11 +56,11 @@ export default function AddWordModal({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col gap-4 p-6 w-full max-w-md">
-        <h2 className="text-xl font-bold text-gray-700">Add New Word</h2>
+      <div className="flex flex-col gap-3 sm:gap-4 w-full">
+        <h2 className="text-lg sm:text-xl font-bold text-gray-700">Add New Word</h2>
 
         <div className="flex flex-col">
-          <label className="text-gray-600 mb-1">Word</label>
+          <label className="text-sm sm:text-base text-gray-600 mb-1">Word</label>
           <input
             type="text"
             value={word}
@@ -73,12 +73,12 @@ export default function AddWordModal({
               }
             }}
             placeholder="Enter word"
-            className="border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border px-3 py-2 rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         <div className="flex flex-col relative" ref={containerRef}>
-          <label className="text-gray-600 mb-1">Translation</label>
+          <label className="text-sm sm:text-base text-gray-600 mb-1">Translation</label>
 
           <input
             type="text"
@@ -93,7 +93,7 @@ export default function AddWordModal({
             }}
             onFocus={() => setDropdownOpen(true)}
             placeholder="Type translation"
-            className="border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border px-3 py-2 rounded text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           {dropdownOpen && (defaultWord.alternatives || []).length > 0 && (
@@ -108,7 +108,7 @@ export default function AddWordModal({
                     setTranslation(option);
                     setDropdownOpen(false);
                   }}
-                  className="px-3 py-2 hover:bg-blue-100 cursor-pointer"
+                  className="px-3 py-2 text-sm sm:text-base hover:bg-blue-100 cursor-pointer"
                 >
                   {option}
                 </li>
@@ -117,16 +117,16 @@ export default function AddWordModal({
           )}
         </div>
 
-        <div className="flex gap-2 justify-end mt-2">
+        <div className="flex flex-col sm:flex-row gap-2 justify-end mt-2">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 transition"
+            className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 transition text-sm sm:text-base order-2 sm:order-1"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition"
+            className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition text-sm sm:text-base order-1 sm:order-2"
           >
             Add Word
           </button>

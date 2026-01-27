@@ -142,7 +142,7 @@ export default function Chat() {
         />
       )}
 
-      <div className="flex gap-2 p-3 bg-gray-50 border-b">
+      <div className="flex flex-wrap gap-2 p-2 sm:p-3 bg-gray-50 border-b">
         <ModeButton
           active={mode === "collection"}
           onClick={() => setMode("collection")}
@@ -160,8 +160,8 @@ export default function Chat() {
         </ModeButton>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4">
-        <div className="min-h-full flex flex-col justify-end gap-4">
+      <div className="flex-1 overflow-y-auto p-2 sm:p-4">
+        <div className="min-h-full flex flex-col justify-end gap-3 sm:gap-4">
           {messages.map((msg, i) => (
             <MessageItem
               key={i}

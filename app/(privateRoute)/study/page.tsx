@@ -16,7 +16,7 @@ export default async function Study() {
   const data = await res.json();
 
   return (
-    <div>
+    <div className="h-full overflow-y-auto">
       <StudySession
         words={data.map((item: any) => item.word)}
         progress={0}

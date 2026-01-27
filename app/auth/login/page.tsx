@@ -8,20 +8,20 @@ export default function LogInForm() {
   const [state, action, pending] = useActionState(login, undefined);
 
   return (
-    <div className="min-h-screen bg-gray-200 flex items-start justify-center pt-20">
+    <div className="min-h-screen bg-gray-200 flex items-start justify-center pt-12 sm:pt-20 px-4">
       <form
         action={action}
         className="
-          w-[420px]
+          w-full max-w-[420px]
           bg-white
           border-2 border-blue-500
           rounded-xl
           shadow-lg
-          p-6
+          p-4 sm:p-6
           flex flex-col gap-3
         "
       >
-        <h1 className="text-3xl font-semibold text-blue-600 mb-4">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-blue-600 mb-2 sm:mb-4">
           Log in
         </h1>
 
@@ -89,12 +89,12 @@ export default function LogInForm() {
           disabled={pending}
           type="submit"
           className="
-            mt-4
+            mt-3 sm:mt-4
             bg-blue-500
             text-white
-            py-2
+            py-2.5 sm:py-2
             rounded-md
-            text-base
+            text-sm sm:text-base
             font-medium
             hover:bg-blue-600
             transition
@@ -104,7 +104,7 @@ export default function LogInForm() {
           Log in
         </button>
 
-        <p className="text-sm text-gray-600 mt-2">
+        <p className="text-xs sm:text-sm text-gray-600 mt-2">
           Don’t have an account?{" "}
           <Link
             href="/auth/registration"
