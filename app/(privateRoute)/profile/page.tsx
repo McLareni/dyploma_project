@@ -52,7 +52,7 @@ export default function Profile() {
     }
 
     fetchUser();
-  }, [session, router]);
+  }, [session.loading, session.user?.userId, router]);
 
   if (loadingSession || !user) {
     return (
@@ -91,8 +91,8 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-200 flex items-center justify-center">
-      <div className="bg-white border-2 border-blue-500 rounded-xl shadow-lg w-[420px] p-6 flex flex-col gap-4">
+    <div className="min-h-dvh bg-gray-200 flex items-center justify-center p-4">
+      <div className="bg-white border-2 border-blue-500 rounded-xl shadow-lg w-full max-w-[420px] p-6 flex flex-col gap-4">
         <h1 className="text-3xl font-semibold text-blue-600 text-center">Profile</h1>
 
         <div className="flex flex-col gap-2">
