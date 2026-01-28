@@ -8,7 +8,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="py-4 px-4 sm:px-6 md:px-10 bg-white shadow-md flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+    <header className="py-4 px-4 sm:px-6 md:px-10 bg-white shadow-md flex justify-between items-center relative">
       <Link href="/" className="text-gray-700 text-xl sm:text-2xl font-bold">
         EasyLanguage
       </Link>
