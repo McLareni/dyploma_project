@@ -2,6 +2,8 @@ import { prisma } from "@/app/lib/prisma";
 import { decrypt } from "@/utils/jwt";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
+
 
 export async function GET(request: Request) {
   const token =
@@ -81,7 +83,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       const newCollection = await tx.collection.create({
         data: {
           name: body.collection.name,
