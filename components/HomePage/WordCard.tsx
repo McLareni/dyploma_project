@@ -1,4 +1,5 @@
 import { Word } from "@/type/word";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 
 type WordCardProps = Word & {
   stage: number;
@@ -16,13 +17,65 @@ export default function WordCard({
   onRemove,
   isDeleting,
 }: WordCardProps) {
+  const cardRef = useRef<HTMLElement | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [showRemove, setShowRemove] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsMobile(mediaQuery.matches);
+
+    update();
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", update);
+      return () => mediaQuery.removeEventListener("change", update);
+    }
+
+    mediaQuery.addListener(update);
+    return () => mediaQuery.removeListener(update);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setShowRemove(false);
+      return;
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!cardRef.current) return;
+      if (!cardRef.current.contains(event.target as Node)) {
+        setShowRemove(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [isMobile]);
+
+  const handleCardClick = () => {
+    if (!isMobile) return;
+    setShowRemove((prev) => !prev);
+  };
+
+  const handleRemoveClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    onRemove();
+  };
+
   return (
-    <article className="group h-20 relative flex flex-col gap-1 rounded-lg border border-slate-200 bg-slate-50/80 p-2 shadow-[0_6px_18px_-14px_rgba(15,23,42,0.4)] transition duration-150 hover:border-slate-300 hover:bg-white hover:shadow-none">
+    <article
+      ref={cardRef}
+      onClick={handleCardClick}
+      className="group h-20 relative flex flex-col gap-1 rounded-lg border border-slate-200 bg-slate-50/80 p-2 shadow-[0_6px_18px_-14px_rgba(15,23,42,0.4)] transition duration-150 hover:border-slate-300 hover:bg-white hover:shadow-none"
+    >
       <button
         type="button"
-        onClick={onRemove}
+        onClick={handleRemoveClick}
         disabled={isDeleting}
-        className="absolute right-2 top-2 hidden rounded-full bg-rose-500 px-2 py-1 text-[10px] font-semibold text-white shadow-sm transition hover:bg-rose-600 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400 group-hover:inline-flex"
+        className={`absolute right-2 top-2 rounded-full bg-rose-500 px-2 py-1 text-[10px] font-semibold text-white shadow-sm transition hover:bg-rose-600 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400 md:group-hover:inline-flex ${
+          showRemove ? "inline-flex" : "hidden"
+        }`}
       >
         {isDeleting ? "..." : "Remove"}
       </button>
