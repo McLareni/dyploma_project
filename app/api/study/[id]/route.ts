@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 export async function PATCH(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
   let token = request.headers.get("Authorization")?.split(" ")[1];
@@ -42,7 +42,12 @@ export async function PATCH(
       where: { userId: Number(result.userId), wordId: body.wordId },
     });
 
-    const newStage = body.status === "success" ? word.stage + 1 : word.stage;
+    const newStage =
+      body.status === "success"
+        ? word.stage >= 6
+          ? 6
+          : word.stage + 1
+        : word.stage;
 
     await prisma.connectionWordUser.update({
       where: { id: word.id },
@@ -58,7 +63,7 @@ export async function PATCH(
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
   } catch {
     return new Response(JSON.stringify({ message: "Internal Server Error" }), {

@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
   const token =
@@ -32,17 +32,18 @@ export async function GET(
     const words = await prisma.connectionWordUser.findMany({
       where: {
         userId: user.id,
+        stage: 6,
       },
     });
 
     return NextResponse.json(
       { ...user, quantityWords: words.length },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     return NextResponse.json(
       { error: `User with id ${id} not found` },
-      { status: 404 }
+      { status: 404 },
     );
   }
 }

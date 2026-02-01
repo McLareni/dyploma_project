@@ -63,7 +63,7 @@ export default function Profile() {
   }
 
   const currentLevelIndex = levels.findIndex(
-    (level) => user.learnedWords <= level.maxWords
+    (level) => user.learnedWords < level.maxWords
   );
   const currentLevel = levels[currentLevelIndex];
   const prevLevelMax =
