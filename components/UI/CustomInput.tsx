@@ -39,7 +39,7 @@ export default function CustomInput({
       />
 
       {error && Array.isArray(error) && (
-        <ul className="text-red-500 text-sm mt-1 list-disc pl-5">
+        <ul className="text-red-500 text-sm lg:mt-1 list-disc pl-5">
           {error.map((e) => (
             <li key={e}>{e}</li>
           ))}
@@ -47,7 +47,7 @@ export default function CustomInput({
       )}
 
       {error && typeof error === "string" && (
-        <p className="text-red-500 text-sm mt-1">
+        <p className="text-red-500 text-sm lg:mt-1">
           {error}
         </p>
       )}

@@ -9,21 +9,21 @@ export default function Login() {
   const [state, action, pending] = useActionState(login, undefined);
 
   return (
-    <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4 sm:px-6">
+    <div className="h-dvh  bg-gray-200 flex items-center justify-center lg:px-4">
       <form
         action={action}
         className="
-          w-full max-w-[420px]
+          w-full lg:max-w-[420px]
+          h-full lg:h-auto
           bg-white
-          border-2 border-blue-500
-          rounded-xl
+          lg:border-2 border-0 border-blue-500
+          lg:rounded-xl
           shadow-lg
           p-6
-          flex flex-col gap-4
-          sm:min-h-screen sm:max-w-full sm:rounded-none sm:shadow-none sm:border-none sm:justify-start
+          flex flex-col lg:gap-4 gap-3 justify-center
         "
       >
-        <h1 className="text-3xl font-semibold text-blue-600 mb-2 text-center sm:text-left sm:mt-12">
+        <h1 className="text-3xl font-semibold text-blue-600 mb-2 text-center">
           Log in
         </h1>
 
@@ -70,7 +70,7 @@ export default function Login() {
           Log in
         </button>
 
-        <p className="text-sm text-gray-600 text-center sm:text-left mt-4">
+        <p className="text-sm text-gray-600 text-center">
           Don’t have an account?{" "}
           <Link
             href="/auth/registration"

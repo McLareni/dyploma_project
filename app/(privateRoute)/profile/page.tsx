@@ -88,18 +88,18 @@ export default function Profile() {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-200 min-h-screen p-4 sm:px-6">
+    <div className="flex items-center justify-center bg-gray-200 h-[calc(100vh-66px)] p-0 lg:p-4">
       <div className="
         bg-white
-        border-2 border-blue-500
-        rounded-xl
+        lg:border-2 border-0 border-blue-500
+        lg:rounded-xl
         shadow-lg
-        w-full max-w-[420px]
+        w-full lg:max-w-[420px]
+        h-full lg:h-auto
         flex flex-col gap-4
         p-6
-        sm:min-h-screen sm:max-w-full sm:rounded-none sm:shadow-none sm:border-none sm:justify-start
       ">
-        <h1 className="text-3xl font-semibold text-blue-600 text-center sm:text-left sm:mt-12">Profile</h1>
+        <h1 className="text-3xl font-semibold text-blue-600 text-center">Profile</h1>
 
         <div className="flex flex-col gap-2">
           <div>

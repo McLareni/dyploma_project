@@ -9,21 +9,20 @@ export default function SignupForm() {
   const [state, action, pending] = useActionState(registration, undefined);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-200 px-4 sm:px-6">
+    <div className="h-dvh  flex items-center justify-center lg:bg-gray-200 lg:px-4 bg-white">
       <form
         action={action}
         className="
-          w-full max-w-3xl
+          w-full lg:max-w-3xl
           bg-white
-          border-2 border-blue-500
-          rounded-xl
-          shadow-lg
+          lg:border-2 border-0 border-blue-500
+          lg:rounded-xl
+          lg:shadow-lg
           p-6
-          grid grid-cols-1 md:grid-cols-2 gap-6
-          sm:min-h-screen sm:max-w-full sm:border-none sm:rounded-none sm:shadow-none sm:justify-start
+          grid grid-cols-1 lg:grid-cols-2 lg:gap-4 gap-3
         "
       >
-        <h1 className="text-3xl font-semibold text-center text-blue-600 md:col-span-2 sm:text-left sm:mt-12">
+        <h1 className="text-3xl font-semibold text-center text-blue-600 md:col-span-2">
           Registration
         </h1>
 
@@ -91,7 +90,7 @@ export default function SignupForm() {
           Sign Up
         </button>
 
-        <p className="text-sm text-gray-600 text-center md:col-span-2 -mt-2 sm:text-left">
+        <p className="text-sm text-gray-600 text-center md:col-span-2">
           Already have an account?{" "}
           <Link
             href="/auth/login"
