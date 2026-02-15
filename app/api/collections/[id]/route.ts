@@ -51,7 +51,9 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const token = (await cookies()).get("session")?.value;
+  const token =
+    request.headers.get("Authorization")?.split(" ")[1] ||
+    (await cookies()).get("session")?.value;
 
   const result = await decrypt(token);
 

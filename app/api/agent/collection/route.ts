@@ -19,7 +19,9 @@ MAX 25 words
 `;
 
 export async function POST(request: Request) {
-  const token = (await cookies()).get("session")?.value;
+  const token =
+    request.headers.get("Authorization")?.split(" ")[1] ||
+    (await cookies()).get("session")?.value;
 
   const result = await decrypt(token);
 
