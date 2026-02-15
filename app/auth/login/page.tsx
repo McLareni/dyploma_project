@@ -1,14 +1,15 @@
-"use client";
+'use client';
 
 import { login } from "@/app/actions/auth";
 import { useActionState } from "react";
 import Link from "next/link";
+import CustomInput from "@/components/UI/CustomInput";
 
-export default function LogInForm() {
+export default function Login() {
   const [state, action, pending] = useActionState(login, undefined);
 
   return (
-    <div className="min-h-screen bg-gray-200 flex items-start justify-center pt-12 sm:pt-20 px-4">
+    <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4 sm:px-6">
       <form
         action={action}
         className="
@@ -18,69 +19,34 @@ export default function LogInForm() {
           rounded-xl
           shadow-lg
           p-6
-          flex flex-col gap-3 
+          flex flex-col gap-4
+          sm:min-h-screen sm:max-w-full sm:rounded-none sm:shadow-none sm:border-none sm:justify-start
         "
       >
-        <h1 className="text-3xl font-semibold text-blue-600 mb-4 text-center">
+        <h1 className="text-3xl font-semibold text-blue-600 mb-2 text-center sm:text-left sm:mt-12">
           Log in
         </h1>
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="email" className="text-sm font-medium text-gray-700">
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="Email"
-            defaultValue={state?.values?.email ?? ""}
-            className="
-              px-3 py-2
-              border border-gray-300
-              rounded-md
-              text-base
-              outline-none
-              focus:border-blue-500
-              focus:ring-2 focus:ring-blue-200
-            "
-          />
-          {state?.errors?.email && (
-            <p className="text-red-500 text-sm mt-1">
-              {state.errors.email[0]}
-            </p>
-          )}
-        </div>
+        <CustomInput
+          id="email"
+          type="email"
+          label="Email"
+          placeholder="Enter your email"
+          defaultValue={state?.values?.email ?? ""}
+          error={state?.errors?.email?.[0]}
+        />
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="password" className="text-sm font-medium text-gray-700">
-            Password
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="Password"
-            defaultValue={state?.values?.password ?? ""}
-            className="
-              px-3 py-2
-              border border-gray-300
-              rounded-md
-              text-base
-              outline-none
-              focus:border-blue-500
-              focus:ring-2 focus:ring-blue-200
-            "
-          />
-          {state?.errors?.password && (
-            <p className="text-red-500 text-sm mt-1">
-              {state.errors.password[0]}
-            </p>
-          )}
-        </div>
+        <CustomInput
+          id="password"
+          type="password"
+          label="Password"
+          placeholder="Enter your password"
+          defaultValue={state?.values?.password ?? ""}
+          error={state?.errors?.password?.[0]}
+        />
 
         {state?.message && (
-          <p className="text-red-600 text-sm mt-2">
+          <p className="text-red-600 text-sm text-center sm:text-left">
             {state.message}
           </p>
         )}
@@ -89,12 +55,12 @@ export default function LogInForm() {
           disabled={pending}
           type="submit"
           className="
-            mt-3 sm:mt-4
+            mt-2
             bg-blue-500
             text-white
-            py-2.5 sm:py-2
+            py-2.5
             rounded-md
-            text-sm sm:text-base
+            text-base
             font-medium
             hover:bg-blue-600
             transition
@@ -104,7 +70,7 @@ export default function LogInForm() {
           Log in
         </button>
 
-        <p className="text-sm text-gray-600 mt-2 text-center">
+        <p className="text-sm text-gray-600 text-center sm:text-left mt-4">
           Don’t have an account?{" "}
           <Link
             href="/auth/registration"

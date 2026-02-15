@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useSession } from "@/hooks/useSession";
 import { useEffect, useState } from "react";
@@ -29,12 +29,10 @@ export default function Profile() {
   useEffect(() => {
     if (session.loading) return;
     setLoadingSession(false);
-
     if (!session.user) {
       router.push("/auth/login");
       return;
     }
-
     async function fetchUser() {
       try {
         const res = await fetch(`/api/profile/${session.user.userId}`);
@@ -50,13 +48,12 @@ export default function Profile() {
         router.push("/auth/login");
       }
     }
-
     fetchUser();
   }, [session.loading, session.user?.userId, router]);
 
   if (loadingSession || !user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-200">
+      <div className="flex items-center justify-center bg-gray-200 min-h-screen">
         <p className="text-gray-600 text-lg">Loading...</p>
       </div>
     );
@@ -77,7 +74,7 @@ export default function Profile() {
   );
 
   const handleLogout = () => {
-    logOut()
+    logOut();
   };
 
   const formatDate = (dateString: string) => {
@@ -91,9 +88,18 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-dvh bg-gray-200 flex items-center justify-center p-4">
-      <div className="bg-white border-2 border-blue-500 rounded-xl shadow-lg w-full max-w-[420px] p-6 flex flex-col gap-4">
-        <h1 className="text-3xl font-semibold text-blue-600 text-center">Profile</h1>
+    <div className="flex items-center justify-center bg-gray-200 min-h-screen p-4 sm:px-6">
+      <div className="
+        bg-white
+        border-2 border-blue-500
+        rounded-xl
+        shadow-lg
+        w-full max-w-[420px]
+        flex flex-col gap-4
+        p-6
+        sm:min-h-screen sm:max-w-full sm:rounded-none sm:shadow-none sm:border-none sm:justify-start
+      ">
+        <h1 className="text-3xl font-semibold text-blue-600 text-center sm:text-left sm:mt-12">Profile</h1>
 
         <div className="flex flex-col gap-2">
           <div>
@@ -120,14 +126,12 @@ export default function Profile() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 mt-2">
-          <button
-            onClick={handleLogout}
-            className="w-full bg-blue-500 text-white py-2 rounded-md text-base font-medium hover:bg-blue-600 transition"
-          >
-            Log Out
-          </button>
-        </div>
+        <button
+          onClick={handleLogout}
+          className="w-full bg-blue-500 text-white py-2 rounded-md text-base font-medium hover:bg-blue-600 transition mt-2"
+        >
+          Log Out
+        </button>
       </div>
     </div>
   );
