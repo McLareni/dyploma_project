@@ -13,6 +13,7 @@ type WordCardProps = Word & {
 export default function WordCard({
   word,
   translation,
+  stage,
   canStudy,
   onRemove,
   isDeleting,
@@ -63,6 +64,13 @@ export default function WordCard({
     onRemove();
   };
 
+  const statusLabel =
+    !canStudy && stage === 6
+      ? "Studied"
+      : !canStudy
+        ? "Cooldown"
+        : null;
+
   return (
     <article
       ref={cardRef}
@@ -93,10 +101,10 @@ export default function WordCard({
       <div className="mt-1 flex items-center justify-end">
         <span
           className={`inline-flex items-center rounded px-1.5 py-0.5 text-[9px] font-semibold whitespace-nowrap ${
-            !canStudy && "bg-slate-100 text-slate-600"
+            statusLabel && "bg-slate-100 text-slate-600"
           }`}
         >
-          {!canStudy && "Studied"}
+          {statusLabel}
         </span>
       </div>
     </article>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { Word } from "@/type/word";
 import AddWordModal from "@/components/Agent/AddWordModal";
@@ -131,7 +132,7 @@ export default function WordsShowcase() {
       await fetchTotalWords();
     } catch (err) {
       console.error("Delete error:", err);
-      alert(err instanceof Error ? err.message : "Failed to delete word");
+      toast.error(err instanceof Error ? err.message : "Failed to delete word");
     } finally {
       setDeletingWordId(null);
     }
@@ -148,7 +149,8 @@ export default function WordsShowcase() {
     });
 
     if (!res.ok) {
-      return console.log("error");
+      toast.error("Failed to add word");
+      return;
     }
 
     const { wordId } = await res.json();
@@ -162,6 +164,7 @@ export default function WordsShowcase() {
     });
 
     setIsModalOpen(false);
+    toast.success("Word added");
     fetchWords();
     fetchTotalWords();
   };

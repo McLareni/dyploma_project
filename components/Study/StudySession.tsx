@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import Study from "./Study";
-import { useSession } from "@/hooks/useSession";
 import StudyCounter from "./StudyCounter";
 import StudyModal from "./StudyModal";
 
@@ -24,32 +24,88 @@ export default function StudySession({
       falseSteps: 0,
       ...item,
       correct: index < progress,
-    }))
+    })),
   );
 
   const [currentProgress, setCurrentProgress] = useState<number>(progress);
-  const { user } = useSession();
 
   const studyWordsRef = useRef(studyWords);
+
+  const syncProgress = async (nextProgress?: number) => {
+    if (isStudy || !collectionId) return;
+
+    const progressValue =
+      nextProgress ??
+      studyWordsRef.current.filter((word) => word.correct).length;
+
+    try {
+      await fetch(`/api/collections/${collectionId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ progress: progressValue }),
+      });
+    } catch (error) {
+      console.error("Failed to sync progress", error);
+    }
+  };
 
   useEffect(() => {
     studyWordsRef.current = studyWords;
   }, [studyWords]);
 
-  const addWordToStudyList = async () => {
-    const res = await fetch(`/api/study`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: user.userId,
-        wordId: studyWords[currentProgress].id,
-      }),
-    });
+  const getNextProgressIndex = (
+    updatedWords: typeof studyWords,
+    currentIndex: number,
+  ) => {
+    const nextIndex = updatedWords.findIndex(
+      (word, index) => !word.correct && index > currentIndex,
+    );
 
-    if (!res.ok) {
-      console.error(await res.json());
+    if (nextIndex !== -1) return nextIndex;
+
+    const firstIndex = updatedWords.findIndex((word) => !word.correct);
+    return firstIndex !== -1 ? firstIndex : 0;
+  };
+
+  const addWordToStudyList = async (): Promise<
+    "added" | "already-added" | "error"
+  > => {
+    try {
+      const res = await fetch(`/api/study`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          wordId: studyWords[currentProgress].id,
+        }),
+      });
+
+      const data = await res.json().catch(() => null);
+
+      if (res.ok) {
+        toast.success("Word added");
+        return "added";
+      }
+
+      if (res.status === 409) {
+        toast.info("Word already added");
+        return "already-added";
+      }
+
+      toast.error(
+        data?.message && typeof data.message === "string"
+          ? data.message
+          : "Failed to add word",
+      );
+      console.error(data);
+      return "error";
+    } catch (error) {
+      toast.error("Network error. Please try again");
+      console.error(error);
+      return "error";
     }
   };
 
@@ -66,61 +122,53 @@ export default function StudySession({
     });
   };
 
-  const changeWordStep = (word: string, status: "success" | "false") => {
-    const currIndex = studyWords.findIndex((w) => w.word === word);
-    const currWord = studyWords[currIndex];
+  const changeWordStep = (
+    word: string,
+    status: "success" | "false" | "added",
+  ) => {
+    const currentWords = studyWordsRef.current;
+    const currIndex = currentWords.findIndex((w) => w.word === word);
+    const currWord = currentWords[currIndex];
 
     if (isStudy && status === "success") {
       changeWordStage(
         currWord.id,
-        currWord.falseSteps <= 3 ? "success" : "false"
+        currWord.falseSteps <= 3 ? "success" : "false",
       );
     }
     if (!isStudy && status === "false") {
-      addWordToStudyList();
+      void addWordToStudyList();
     }
 
-    changeStudyWords((prev) =>
-      prev.map((item, i) =>
-        i === currIndex
-          ? {
-              ...item,
-              correct: status === "success" || (status === "false" && !isStudy),
-              falseSteps:
-                status === "false" ? item.falseSteps + 1 : item.falseSteps,
-            }
-          : item
-      )
+    const updatedWords = currentWords.map((item, i) =>
+      i === currIndex
+        ? {
+            ...item,
+            correct:
+              status === "success" ||
+              status === "added" ||
+              (status === "false" && !isStudy),
+            falseSteps: status === "false" ? item.falseSteps + 1 : item.falseSteps,
+          }
+        : item,
     );
 
-    setCurrentProgress((prev) => {
-      const nextIndex = studyWords.findIndex(
-        (w, i) => !w.correct && i > currIndex
-      );
-      if (nextIndex !== -1) return nextIndex;
-      const firstIndex = studyWords.findIndex((w) => !w.correct);
-      return firstIndex !== -1 ? firstIndex : 0;
-    });
+    changeStudyWords(updatedWords);
+
+    const nextProgressIndex = getNextProgressIndex(updatedWords, currIndex);
+    setCurrentProgress(nextProgressIndex);
+
+    if (!isStudy) {
+      const updatedProgress = updatedWords.filter((item) => item.correct).length;
+      void syncProgress(updatedProgress);
+    }
   };
 
-  useEffect(() => {
-    if (isStudy) return;
-    const sendProgress = () => {
-      const progress = studyWordsRef.current.filter((w) => w.correct).length;
-
-      navigator.sendBeacon(
-        `/api/collections/${collectionId}`,
-        JSON.stringify({ progress })
-      );
-    };
-
-    window.addEventListener("beforeunload", sendProgress);
-
-    return () => {
-      sendProgress();
-      window.removeEventListener("beforeunload", sendProgress);
-    };
-  }, [collectionId]);
+  const addCurrentWordToStudy = async (): Promise<
+    "added" | "already-added" | "error"
+  > => {
+    return addWordToStudyList();
+  };
 
   if (studyWords.filter((word) => !word.correct).length === 0) {
     return <StudyModal isStudy={!!isStudy} />;
@@ -134,15 +182,12 @@ export default function StudySession({
           maxIndex={studyWords.length}
         />
       )}
-      <Study word={studyWords[currentProgress]} nextWord={changeWordStep} />
-      {!isStudy && (
-        <button
-          onClick={addWordToStudyList}
-          className="bg-blue-500 text-white text-xl px-4 py-2 rounded w-52 h-12"
-        >
-          Add to my list
-        </button>
-      )}
+      <Study
+        word={studyWords[currentProgress]}
+        nextWord={changeWordStep}
+        isStudy={!!isStudy}
+        onAddToStudy={addCurrentWordToStudy}
+      />
     </div>
   );
 }

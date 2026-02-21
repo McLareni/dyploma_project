@@ -1,14 +1,13 @@
 import { prisma } from "@/app/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { decrypt } from "@/utils/jwt";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  let token = request.headers.get("Authorization")?.split(" ")[1];
-
-  if (!token) {
-    token = (await cookies()).get("session")?.value;
-  }
+  const token =
+    request.headers.get("Authorization")?.split(" ")[1] ||
+    (await cookies()).get("session")?.value;
 
   const result = await decrypt(token);
 
@@ -41,11 +40,10 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  let token = request.headers.get("Authorization")?.split(" ")[1];
+  const token =
+    request.headers.get("Authorization")?.split(" ")[1] ||
+    (await cookies()).get("session")?.value;
 
-  if (!token) {
-    token = (await cookies()).get("session")?.value;
-  }
   const result = await decrypt(token);
 
   if (!result) {
@@ -78,9 +76,19 @@ export async function POST(request: Request) {
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
-  } catch {
+  } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return new Response(JSON.stringify({ message: "Word already added" }), {
+        status: 409,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     return new Response(JSON.stringify({ message: "Internal Server Error" }), {
       status: 500,
       headers: { "Content-Type": "application/json" },

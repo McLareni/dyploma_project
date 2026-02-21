@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import AppToaster from "@/components/UI/AppToaster";
 import "./globals.css";
 
 
@@ -25,6 +26,7 @@ export default function RootLayout({
         className="bg-gray-200 h-dvh overflow-hidden"
       >
         {children}
+        <AppToaster />
       </body>
     </html>
   );
