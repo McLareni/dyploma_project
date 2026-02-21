@@ -52,14 +52,14 @@ export default function Actions({
         <div className="flex flex-col items-center justify-center gap-3">
           <button
             onClick={nextWordFn}
-            className="bg-blue-500 text-white px-4 py-3 sm:py-2 rounded w-full sm:w-52 h-12"
+            className="bg-blue-500 text-white rounded w-full sm:w-52 h-10 sm:h-12"
           >
             Next word
           </button>
           {status === "success" && (
             <button
               onClick={handleIWasWrong}
-              className="bg-amber-500 text-white rounded w-full sm:w-52 h-8 sm:h-12"
+              className="bg-amber-500 text-white rounded w-full sm:w-52 h-10 sm:h-12"
             >
               I was wrong
             </button>
@@ -70,13 +70,13 @@ export default function Actions({
           <div className="flex flex-col sm:flex-row gap-3 w-full">
             <button
               onClick={() => changeCard("success")}
-              className="bg-green-500 text-white rounded w-full sm:w-52 h-8 sm:h-12"
+              className="bg-green-500 text-white rounded w-full sm:w-52 h-10 sm:h-12"
             >
               I know
             </button>
             <button
               onClick={() => changeCard("false")}
-              className="bg-red-500 text-white rounded w-full sm:w-52 h-8 sm:h-12"
+              className="bg-red-500 text-white rounded w-full sm:w-52 h-10 sm:h-12"
             >
               Don't know
             </button>
@@ -84,7 +84,7 @@ export default function Actions({
           {!isStudy && (
             <button
               onClick={handleAddToStudy}
-              className="bg-blue-500 text-white rounded w-full sm:w-52 h-8 sm:h-12"
+              className="bg-blue-500 text-white rounded w-full sm:w-52 h-10 sm:h-12"
             >
               Add to my list
             </button>

@@ -12,6 +12,7 @@ import MessageItem from "./MessageItem";
 import ChatInput from "./ChatInput";
 import { GenerateAIMessage } from "@/hooks/useAIGenerate";
 import { GeneratedWord } from "@/type/word";
+import { toast } from "sonner";
 
 export type ChatMode = "collection" | "story" | "translate";
 
@@ -77,41 +78,76 @@ export default function Chat() {
   };
 
   const handleSubmitCollection = async (name: string) => {
-    await fetch("/api/collections", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: user.userId,
-        words: currentWords,
-        collection: { name, authorName: "EnglishAgent" },
-      }),
-    });
-    router.push("/collections");
+    const loadingToastId = toast.loading("Creating collection...");
+
+    try {
+      const res = await fetch("/api/collections", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user.userId,
+          words: currentWords,
+          collection: { name, authorName: "EnglishAgent" },
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to create collection");
+      }
+
+      toast.dismiss(loadingToastId);
+      toast.success("Collection created");
+    } catch (error) {
+      toast.dismiss(loadingToastId);
+      toast.error("Failed to create collection");
+      console.error(error);
+    }
   };
 
   const handleSubmitWord = async (translation: string, word: string) => {
-    const res = await fetch("/api/word", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: user.userId,
-        word: { word, translation },
-      }),
-    });
+    const loadingToastId = toast.loading("Adding word...");
 
-    if (!res.ok) {
-      return console.log("error");
+    try {
+      const res = await fetch("/api/word", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user.userId,
+          word: { word, translation },
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to create word");
+      }
+
+      const { wordId } = await res.json();
+
+      const studyRes = await fetch("/api/study", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          wordId,
+        }),
+      });
+
+      toast.dismiss(loadingToastId);
+
+      if (studyRes.status === 409) {
+        toast.info("Word already added to study");
+        return;
+      }
+
+      if (!studyRes.ok) {
+        throw new Error("Failed to add word to study");
+      }
+
+      toast.success("Word added to study");
+    } catch (error) {
+      toast.dismiss(loadingToastId);
+      toast.error("Failed to add word");
+      console.error(error);
     }
-
-    const { wordId } = await res.json();
-
-    await fetch("/api/study", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        wordId,
-      }),
-    });
   };
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
