@@ -16,9 +16,7 @@ export default function Actions({
   wordKey,
 }: IProps) {
   const [nextWord, setNextWord] = useState<boolean>(false);
-  const [status, setStatus] = useState<"success" | "false" | "added">(
-    "false",
-  );
+  const [status, setStatus] = useState<"success" | "false" | "added">("false");
 
   useEffect(() => {
     setNextWord(false);
@@ -32,30 +30,20 @@ export default function Actions({
   };
 
   const nextWordFn = async () => {
-    if (!isStudy && status === "added") {
-      const result = await onAddToStudy();
-      if (result === "error") {
-        return;
-      }
-    }
-
     changeWord(status);
     setNextWord(false);
   };
 
   const handleAddToStudy = async () => {
-    if (!nextWord) {
-      setStatus("added");
-      flipCard();
-      setNextWord(true);
-      return;
-    }
+    void onAddToStudy();
+    setStatus("added");
+    flipCard();
+    setNextWord(true);
+  };
 
-    const result = await onAddToStudy();
-    if (result !== "error") {
-      changeWord("added");
-      setNextWord(false);
-    }
+  const handleIWasWrong = () => {
+    setStatus("false");
+    nextWordFn();
   };
 
   return (
@@ -68,12 +56,12 @@ export default function Actions({
           >
             Next word
           </button>
-          {!isStudy && (
+          {status === "success" && (
             <button
-              onClick={handleAddToStudy}
-              className="bg-blue-500 text-white px-4 py-3 sm:py-2 rounded w-full sm:w-52 h-12"
+              onClick={handleIWasWrong}
+              className="bg-amber-500 text-white rounded w-full sm:w-52 h-8 sm:h-12"
             >
-              Add to my list
+              I was wrong
             </button>
           )}
         </div>
@@ -82,13 +70,13 @@ export default function Actions({
           <div className="flex flex-col sm:flex-row gap-3 w-full">
             <button
               onClick={() => changeCard("success")}
-              className="bg-green-500 text-white px-4 py-3 sm:py-2 rounded w-full sm:w-52 h-12"
+              className="bg-green-500 text-white rounded w-full sm:w-52 h-8 sm:h-12"
             >
               I know
             </button>
             <button
               onClick={() => changeCard("false")}
-              className="bg-red-500 text-white px-4 py-3 sm:py-2 rounded w-full sm:w-52 h-12"
+              className="bg-red-500 text-white rounded w-full sm:w-52 h-8 sm:h-12"
             >
               Don't know
             </button>
@@ -96,7 +84,7 @@ export default function Actions({
           {!isStudy && (
             <button
               onClick={handleAddToStudy}
-              className="bg-blue-500 text-white px-4 py-3 sm:py-2 rounded w-full sm:w-52 h-12"
+              className="bg-blue-500 text-white rounded w-full sm:w-52 h-8 sm:h-12"
             >
               Add to my list
             </button>

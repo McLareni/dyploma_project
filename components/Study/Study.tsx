@@ -29,8 +29,8 @@ export default function Study({
   };
 
   return (
-    <div key={studyWord.word} className="flex flex-col items-center gap-8 sm:gap-10 lg:gap-12 px-4 flex-1">
-      <div className="outline-none perspective-midrange w-60 h-60 flex-1 lg:w-62 lg:h-80">
+    <div key={studyWord.word} className="flex flex-col items-center gap-6 sm:gap-7 lg:gap-8 px-4">
+      <div className="outline-none  w-60 aspect-3/4 flex-1 sm:w-70 sm:aspect-4/5 lg:w-80">
         <div
           className={clsx(
             "relative size-full transition duration-1000 transform-3d text-2xl sm:text-3xl lg:text-4xl text-center text-gray-700",

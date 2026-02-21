@@ -72,6 +72,8 @@ export default function StudySession({
   const addWordToStudyList = async (): Promise<
     "added" | "already-added" | "error"
   > => {
+    const loadingToastId = toast.loading("Adding word...");
+
     try {
       const res = await fetch(`/api/study`, {
         method: "POST",
@@ -86,15 +88,18 @@ export default function StudySession({
       const data = await res.json().catch(() => null);
 
       if (res.ok) {
+        toast.dismiss(loadingToastId);
         toast.success("Word added");
         return "added";
       }
 
       if (res.status === 409) {
+        toast.dismiss(loadingToastId);
         toast.info("Word already added");
         return "already-added";
       }
 
+      toast.dismiss(loadingToastId);
       toast.error(
         data?.message && typeof data.message === "string"
           ? data.message
@@ -103,6 +108,7 @@ export default function StudySession({
       console.error(data);
       return "error";
     } catch (error) {
+      toast.dismiss(loadingToastId);
       toast.error("Network error. Please try again");
       console.error(error);
       return "error";
@@ -175,7 +181,7 @@ export default function StudySession({
   }
 
   return (
-    <div className="flex flex-col gap-4 p-6 justify-center items-center h-full">
+    <div className="flex flex-col gap-4 p-6 justify-start items-center h-full">
       {isStudy && (
         <StudyCounter
           currIndex={studyWords.filter((word) => word.correct).length}
