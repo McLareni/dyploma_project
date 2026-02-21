@@ -31,7 +31,14 @@ export default function Actions({
     setNextWord(true);
   };
 
-  const nextWordFn = () => {
+  const nextWordFn = async () => {
+    if (!isStudy && status === "added") {
+      const result = await onAddToStudy();
+      if (result === "error") {
+        return;
+      }
+    }
+
     changeWord(status);
     setNextWord(false);
   };
