@@ -29,8 +29,8 @@ export default function Actions({
     setNextWord(true);
   };
 
-  const nextWordFn = async () => {
-    changeWord(status);
+  const nextWordFn = (overrideStatus?: "success" | "false" | "added") => {
+    changeWord(overrideStatus ?? status);
     setNextWord(false);
   };
 
@@ -43,7 +43,7 @@ export default function Actions({
 
   const handleIWasWrong = () => {
     setStatus("false");
-    nextWordFn();
+    nextWordFn("false");
   };
 
   return (
@@ -51,7 +51,7 @@ export default function Actions({
       {nextWord ? (
         <div className="flex flex-col items-center justify-center gap-3">
           <button
-            onClick={nextWordFn}
+            onClick={() => nextWordFn()}
             className="bg-blue-500 text-white rounded w-full sm:w-52 h-10 sm:h-12"
           >
             Next word
